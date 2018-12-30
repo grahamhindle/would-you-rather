@@ -1,3 +1,34 @@
 https://pbs.twimg.com/profile_images/1039352369232789504/M7tgq-c8_400x400.jpg
 https://pbs.twimg.com/profile_images/803732106513743872/o-JoI9g7_400x400.jpg
 https://pbs.twimg.com/profile_images/682327338755854336/gl1v_Qf6_400x400.jpg
+
+<li key={user.id}>
+                    <div>User: {user.name}</div>
+                    <img
+                    src={user.avatarURL}
+                    alt={`Avatar of ${users.name}`}
+                    className='avatar'
+                  />
+            </li>
+
+
+
+            <SplitButton
+              id={this.props.authedUser}
+              title={
+                <div className="pull-left"
+                >
+                <img className='avatar' src = {avatar} alt={`no avatar for {initUser.name}`}></img>
+                    {initUser? initUser.name:'Select User'}
+                </div>
+              }
+            >
+            {this.props.users.map((user) =>(
+              <MenuItem eventKey={user.id}>
+                <img className='avatar' src = {user.avatarURL} alt={`no avatar for {user.name}`}></img>
+                {user.name}
+              </MenuItem>
+              
+                
+            ))}
+            </SplitButton>

@@ -12,3 +12,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.avatar {
+  height: 25px;
+  border-radius: 12px;
+  margin: 10px;
+}
