@@ -8,6 +8,7 @@ export function getAuthedUser(id){
   }
 }
 export function setAuthedUser(id){
+  console.log('action', id)
   return {
   type: SET_AUTHED_USER,
   id,

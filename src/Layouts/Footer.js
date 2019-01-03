@@ -2,6 +2,7 @@ import React from 'react'
 import {Tabs, Tab,  Paper } from '@material-ui/core'
 
 export default props =>
+
 <Paper>
 <Tabs
   value={0}

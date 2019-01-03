@@ -1,61 +1,43 @@
-import React, { Component } from 'react'
+import React  from 'react'
+
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import Avatar from '@material-ui/core/Avatar'
-import ListItemText from '@material-ui/core/ListItemText'
+import { List, ListItemText, Paper} from '@material-ui/core'
 import './App.css'
 import { connect } from 'react-redux'
-import { setAuthedUser, SET_AUTHED_USER } from '../actions/authedUser'
-import { withStyles } from '@material-ui/core'
-import { dispatch } from 'rxjs/internal/observable/range';
+import { setAuthedUser } from '../actions/authedUser'
+import compose from 'recompose/compose';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   root: {
-    width: '100%',
-    maxWidth: 360,
+    width: '50%',
+    maxWidth: 180,
     backgroundColor: theme.palette.background.paper,
+    flex: 'center',
+    border: 5,
+    
+    
   },
 });
 
- class Login extends Component {
-  constructor(props) {
-    super(props);
-  }
-    
-  
-  /*componentDidMount(){
-    const {dispatch, authedUser} = this.props
-    console.log(this.props)
-    dispatch(setAuthedUser)({
-      id: authedUser,
-    })
-    
-  }
-  */
-  
 
 
-  
 
-  handleClick = (event) => {
-    dispatch(setAuthedUser(event))
-
-  }
-
- 
-render() {
- 
-  const x = this.props.users.find( user => user.id === this.props.authedUser )
-  if (x === undefined || null)
-    return  (
-      <div>
-      </div>
-    )
-    
+function Login ({dispatch, users, classes}) {
+  console.log(users)
+  if ( users === null)
     return (
-        <div classes= {styles}>
-        {this.props.users.map((user) => (
-          <ListItem key={user.id} onClick = {( event) => this.props.handleClick(user.id, event)} >
+      <div></div>
+    )
+    else 
+    return  (
+        
+        <List component="nav">
+
+         {users.map((user) => (
+          <ListItem alignItems="flex-start" button={true} key={user.id} onClick={(event) => dispatch(setAuthedUser(user.id))} >
             <ListItemAvatar>
               <Avatar
                 alt={`Avatar n°${user.name + 1}`}
@@ -63,26 +45,21 @@ render() {
               />
             </ListItemAvatar>
             <ListItemText primary={user.name}/>
-            
           </ListItem>
         ))}
-         </div> 
+        </List>
+      
+        
         )
         
     }   
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-      handleClick: (id )=>{
-        dispatch(setAuthedUser(id))
-        }
-    } 
-  }
+
+
+  
 function mapStateToProps({ users, authedUser }) {
-    console.log('props',authedUser)
     return {
         users: Object.values(users),
-        authedUser,
+        authedUser: authedUser,
     }
 }
-export default   connect(mapStateToProps, mapDispatchToProps)(Login)
+export default compose(withStyles(styles),connect(mapStateToProps ))(Login)

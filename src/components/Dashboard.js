@@ -2,29 +2,42 @@
 
 import React , { Component } from 'react'
 import { connect } from 'react-redux'
-import Login from './Login'
 import Header from '../Layouts/Header';
-import Footer from '../Layouts/Footer'
+import Login from '../components/Login'
+import Test from '../components/Test'
+
+
 
 
 
 class Dashboard extends Component {
-  
-  render() {
-  
-    return (
-        <div>
-      
-        <Header />
-
-      <Login />
-        <Footer />
-      </div>
-    );
-    
+  constructor(props){
+    super(props)
   }
 
-             
+  
+  render() {
     
+    if ( this.props.users === null)
+    return (
+      <div></div>
+    )
+    else 
+    return (
+        <div>
+        <Header />
+        
+       
+      </div>
+    )
+  }  
 }
-export default connect()(Dashboard)
+
+function mapStateToProps({ users, questions,authedUser}) {
+  return {
+      users: Object.values(users),
+      questions: Object.values(questions),
+      authedUser,
+  }
+}
+export default connect(mapStateToProps)(Dashboard)
