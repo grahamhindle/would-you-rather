@@ -8,11 +8,15 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Switch from '@material-ui/core/Switch';
+import compose from 'recompose/compose';
+import { connect } from 'react-redux'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import Login from '../components/Login'
+import { ListItemText, ListItemAvatar, Avatar,Tabs,Tab } from '@material-ui/core'
+import { setAuthedUser } from '../actions/authedUser'
+
 
 const styles = {
   root: {
@@ -42,12 +46,18 @@ class Header extends React.Component {
     this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleClose = () => {
+  handleSelectUser = (id) => {
+    console.log(id)
+    this.setState({ auth:false })
+    this.props.dispatch(setAuthedUser(id))
+    this.handleClose()
+  }
+  handleClose = () => {   
     this.setState({ anchorEl: null });
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes,users } = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
@@ -63,14 +73,22 @@ class Header extends React.Component {
         </FormGroup>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              <MenuIcon />
-            </IconButton>
+          <Tabs value={1} onChange={this.handleChange}>
+            <Tab label="Home" />
+            <Tab label="New Question" />
+            <Tab label="Leader Board" />
+          </Tabs>
+        
+        
+            
             <Typography variant="h6" color="inherit" className={classes.grow}>
-              Photos
+              Would You Rather - current player : {this.props.authedUser}
             </Typography>
             {auth && (
+              
               <div>
+              
+            
                 <IconButton
                   aria-owns={open ? 'menu-appbar' : undefined}
                   aria-haspopup="true"
@@ -93,13 +111,25 @@ class Header extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <Login user={this.props.handleClose}/>
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                </Menu>
-              </div>
-            )}
-          </Toolbar>
+                {users.map((user) => (
+                <MenuItem
+                  button={true}
+                  key={user.id}
+                  onClick={this.handleSelectUser.bind(this,user.id)}  
+                >
+                  <ListItemAvatar>
+                    <Avatar
+                      alt={`Avatar n°${user.name + 1}`}
+                      src={user.avatarURL}
+                    />
+                  </ListItemAvatar>
+                <ListItemText primary={user.name}/>
+              </MenuItem>
+            ))}
+                    </Menu>
+                  </div>
+                )}
+              </Toolbar>
         </AppBar>
       </div>
     );
@@ -109,5 +139,11 @@ class Header extends React.Component {
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+function mapStateToProps({ users, authedUser }) {
+    return {
+        users: Object.values(users),
+        authedUser: authedUser,
+    }
+}
 
-export default withStyles(styles)(Header);
+export default compose(withStyles(styles),connect(mapStateToProps))(Header);

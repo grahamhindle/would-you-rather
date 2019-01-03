@@ -26,7 +26,7 @@ class Dashboard extends Component {
     return (
         <div>
         <Header />
-        
+        {this.props.authedUser && <Test/> }
        
       </div>
     )
